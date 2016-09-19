@@ -32,7 +32,6 @@ import com.fatsecret.platform.utils.RecipeUtility;
  * @version 1.0
  */
 public class RecipeService {
-	
 	/** Request Object */
 	private Request request;
 	
@@ -54,10 +53,13 @@ public class RecipeService {
 	 */
 	public Recipe getRecipe(Long recipeId) {
 		JSONObject response = request.getRecipe(recipeId);
-		if(response != null) {
-			JSONObject recipe = response.getJSONObject("recipe");
-			return RecipeUtility.parseRecipeFromJSONObject(recipe);
-		}
+		try{
+			if(response != null) {
+				JSONObject recipe = response.getJSONObject("recipe");
+				return RecipeUtility.parseRecipeFromJSONObject(recipe);
+			}
+		}catch (Exception ignore){}
+		
 		
 		return null;
 	}
@@ -81,30 +83,31 @@ public class RecipeService {
 	 */
 	public Response<CompactRecipe> searchRecipes(String query, Integer pageNumber) {
 		JSONObject json = request.getRecipes(query, pageNumber);
+		Response<CompactRecipe> response = new Response<CompactRecipe>();
 		
-		if(json != null) {
+		try{
+			if(json != null) {
 
-			JSONObject recipes = json.getJSONObject("recipes");
+				JSONObject recipes = json.getJSONObject("recipes");
+				int maxResults = recipes.getInt("max_results");
+				int totalResults = recipes.getInt("total_results");
 
-			int maxResults = recipes.getInt("max_results");
-			int totalResults = recipes.getInt("total_results");
-
-			List<CompactRecipe> results = new ArrayList<CompactRecipe>();//RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
-			
-			if(totalResults > maxResults * pageNumber) {
-				JSONArray recipe = recipes.getJSONArray("recipe");
-				results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
-			}			
-			
-			Response<CompactRecipe> response = new Response<CompactRecipe>();
-			
-			response.setPageNumber(pageNumber);
-			response.setMaxResults(maxResults);
-			response.setTotalResults(totalResults);
-			response.setResults(results);
-			
-			return response;
-		}		
+				List<CompactRecipe> results = new ArrayList<CompactRecipe>();//RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
+				
+				if(totalResults > maxResults * pageNumber) {
+					JSONArray recipe = recipes.getJSONArray("recipe");
+					results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
+				}			
+				
+				
+				response.setPageNumber(pageNumber);
+				response.setMaxResults(maxResults);
+				response.setTotalResults(totalResults);
+				response.setResults(results);
+				
+				return response;
+			}
+		}catch(Exception ignore){}
 		return null;
 	}
 }
