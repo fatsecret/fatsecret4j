@@ -51,11 +51,14 @@ public class Request {
 	 * @return				food items at a particular page number based on the query
 	 */
 	public JSONObject getFoods(String query, int pageNumber) {
+
 		try {
 			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
 		}
+		
 		return null;
 	}
 
@@ -66,11 +69,14 @@ public class Request {
 	 * @return				food based on the identifier
 	 */
 	public JSONObject getFood(Long id) {
+		
 		try {
 			String apiUrl = builder.buildFoodSearchUrl(id);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
 		}
+		
 		return null;
 	}
 
@@ -82,11 +88,14 @@ public class Request {
 	 * @return				recipes at a particular page number based on the query
 	 */
 	public JSONObject getRecipes(String query, int pageNumber) {
+		
 		try {
 			String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
 		}
+		
 		return null;
 	}
 
@@ -102,8 +111,9 @@ public class Request {
 			String apiUrl = builder.buildRecipeSearchUrl(id);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
-
+			System.out.println("Exception: " + e.getMessage());
 		}
+		
 		return null;
 	}
 	

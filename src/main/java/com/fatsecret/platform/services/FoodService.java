@@ -60,10 +60,10 @@ public class FoodService {
 				JSONObject food = response.getJSONObject("food");
 				return FoodUtility.parseFoodFromJSONObject(food);
 			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
 		}
-		catch (Exception e){
-			 System.out.println(e.getMessage());
-		}
+		
 		return null;
 	}
 	
@@ -108,9 +108,9 @@ public class FoodService {
 				response.setResults(results);
 				
 				return response;
-			}		
-		}catch (Exception e){
-			 System.out.println(e.getMessage());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
 		}
 		
 		return null;

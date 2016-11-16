@@ -53,13 +53,15 @@ public class RecipeService {
 	 */
 	public Recipe getRecipe(Long recipeId) {
 		JSONObject response = request.getRecipe(recipeId);
-		try{
+		
+		try {
 			if(response != null) {
 				JSONObject recipe = response.getJSONObject("recipe");
 				return RecipeUtility.parseRecipeFromJSONObject(recipe);
 			}
-		}catch (Exception ignore){}
-		
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
 		
 		return null;
 	}
@@ -85,9 +87,8 @@ public class RecipeService {
 		JSONObject json = request.getRecipes(query, pageNumber);
 		Response<CompactRecipe> response = new Response<CompactRecipe>();
 		
-		try{
+		try {
 			if(json != null) {
-
 				JSONObject recipes = json.getJSONObject("recipes");
 				int maxResults = recipes.getInt("max_results");
 				int totalResults = recipes.getInt("total_results");
@@ -99,7 +100,6 @@ public class RecipeService {
 					results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
 				}			
 				
-				
 				response.setPageNumber(pageNumber);
 				response.setMaxResults(maxResults);
 				response.setTotalResults(totalResults);
@@ -107,7 +107,9 @@ public class RecipeService {
 				
 				return response;
 			}
-		}catch(Exception ignore){}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());			
+		}
 		return null;
 	}
 }

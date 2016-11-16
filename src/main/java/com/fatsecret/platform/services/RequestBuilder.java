@@ -181,7 +181,9 @@ public class RequestBuilder {
 			m.init(sk);
 			sign = encode(new String(Base64.encode(m.doFinal(text.getBytes()), Base64.DEFAULT)).trim());
 		} catch(java.security.NoSuchAlgorithmException e) {
+			System.out.println("NoSuchAlgorithmException: " + e.getMessage());
 		} catch(java.security.InvalidKeyException e) {
+			System.out.println("InvalidKeyException: " + e.getMessage());
 		}
 		return sign;
 	}
