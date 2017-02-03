@@ -93,7 +93,7 @@ public class RecipeService {
 				int maxResults = recipes.getInt("max_results");
 				int totalResults = recipes.getInt("total_results");
 
-				List<CompactRecipe> results = new ArrayList<CompactRecipe>();//RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
+				List<CompactRecipe> results = new ArrayList<CompactRecipe>();
 				
 				if(totalResults > maxResults * pageNumber) {
 					JSONArray recipe = recipes.getJSONArray("recipe");
