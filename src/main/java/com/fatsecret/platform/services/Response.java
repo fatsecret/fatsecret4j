@@ -22,7 +22,7 @@ import java.util.List;
  * @param <E> the type of elements held in the list in this response
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Response<E> {
 	

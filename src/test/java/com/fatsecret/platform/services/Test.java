@@ -12,14 +12,14 @@ import com.fatsecret.platform.model.Recipe;
 public class Test {
 
 	public static void main(String[] args) {
-		String key = "your key";
-		String secret = "your secret";
+        String key = "3cdec5092eff49b0ab3e94030e254705";
+        String secret = "1d74956fc1c94ff5be410686d718ba22";
 		
-		RecipeService recipeService = new RecipeService(key, secret);
-		recipeService.getRecipe(315L);
-		recipeService.searchRecipes("Marinated Herb Chicken");
+        FatsecretService service = new FatsecretService(key, secret);
+        service.getRecipe(315L);
+        service.searchRecipes("Marinated Herb Chicken");
 		
-		Response<CompactRecipe> response = recipeService.searchRecipes("chicken");
+		Response<CompactRecipe> response = service.searchRecipes("chicken");
 		
 		System.out.println("Total Results: " + response.getTotalResults());
 		System.out.println("Max Results: " + response.getMaxResults());
@@ -34,7 +34,7 @@ public class Test {
 		}
 		
 		System.out.println("==================================================================================================================================");
-		Recipe recipe = recipeService.getRecipe(84411L);
+		Recipe recipe = service.getRecipe(84411L);
 		System.out.println(recipe.getId() + " - " + recipe.getName() + ", Description: " + recipe.getDescription());
 		System.out.println("Prep Time: " + recipe.getPreparationTime() + ", Cook Time: " + recipe.getCookingTime());
 
@@ -50,12 +50,11 @@ public class Test {
 			System.out.println(ingredient.getName() + " - " + ingredient.getNumberOfUnits() + " " + ingredient.getMeasurementDescription());
 		}
 		
-		FoodService foodService = new FoodService(key, secret);
-		Food food = foodService.getFood(60810L);
+		Food food = service.getFood(60810L);
 		System.out.println("==>> Food");
 		System.out.println("Food: " + food.getName());
 		
-		Response<CompactFood> res = foodService.searchFoods("biryani", 1);
+		Response<CompactFood> res = service.searchFoods("biryani", 1);
 		System.out.println("==>> Response");
 		System.out.println("Total: " + res.getTotalResults());
 		System.out.println("Max: " + res.getMaxResults());

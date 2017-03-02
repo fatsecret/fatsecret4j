@@ -22,7 +22,7 @@ import java.util.List;
  * This class represents detailed information about the recipe item.
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Recipe extends CompactRecipe {
 	

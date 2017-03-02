@@ -21,7 +21,7 @@ import java.math.BigDecimal;
  * This class represents nutrient values about the recipe item according to serving size.
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Serving {
 	

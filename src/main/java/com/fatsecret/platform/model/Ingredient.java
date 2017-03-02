@@ -21,7 +21,7 @@ import java.math.BigDecimal;
  * This class represents detailed information about the ingredient
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Ingredient {
 	

@@ -1,13 +1,13 @@
 # fatsecret4j
-Java Client for using Fatsecret REST API
+Java/Android Client for using Fatsecret REST API
 
-Add maven dependency -
+Add maven dependency in your pom.xml -
 
 	<groupId>com.fatsecret4j</groupId>
 	
 	<artifactId>fatsecret-platform</artifactId>
 	
-	<version>1.0.1</version>
+	<version>2.0</version>
 
 ## Supported methods
 

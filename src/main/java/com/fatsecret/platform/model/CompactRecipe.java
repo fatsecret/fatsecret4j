@@ -21,7 +21,7 @@ import java.util.List;
  * This class represents summary information about the recipe item.
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class CompactRecipe {
 

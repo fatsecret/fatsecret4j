@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
  * This class helps in building requests for sending them to the fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class RequestBuilder {
 	/** A value FatSecret API issues to you which helps this API identify you */
@@ -123,7 +123,7 @@ public class RequestBuilder {
 	}
 
 	/**
-	 * Returns string generated using params and "&" for signature base and normalized parameters
+	 * Returns string generated using params and "&amp;" for signature base and normalized parameters
 	 *
 	 * @param params		an array of parameter values as "key=value" pair
 	 * @return 				the string by appending separator after each parameter from params except the last.
@@ -165,6 +165,7 @@ public class RequestBuilder {
 	 * @param uri			request URL - http://platform.fatsecret.com/rest/server.api (Always remains the same)
 	 * @param params		an array of parameter values as "key=value" pair
 	 * @return				oauth_signature which will be added to request for calling fatsecret api
+	 * @throws UnsupportedEncodingException if encoding is unsupported
 	 */
 	public String sign(String method, String uri, String[] params) throws UnsupportedEncodingException {
 		String encodedURI = encode(uri);
@@ -194,6 +195,7 @@ public class RequestBuilder {
 	 * @param query			search terms for querying food items
 	 * @param pageNumber	page Number to search the food items
 	 * @return				rest url which will be sent to fatsecret platform server for searching food items
+	 * @throws Exception	if sign throws exception
 	 */
 	public String buildFoodsSearchUrl(String query, int pageNumber) throws Exception {
 		List<String> params = new ArrayList<String>(Arrays.asList(generateOauthParams()));
@@ -212,8 +214,9 @@ public class RequestBuilder {
 	 *
 	 * @param id			the unique food identifier
 	 * @return				rest url which will be sent to fatsecret platform server for searching unique food item
+	 * @throws Exception	if sign throws exception
 	 */
-	public String buildFoodSearchUrl(Long id) throws Exception {
+	public String buildFoodGetUrl(Long id) throws Exception {
 		List<String> params = new ArrayList<String>(Arrays.asList(generateOauthParams()));
 		String[] template = new String[1];
 		params.add("method=food.get");
@@ -229,6 +232,7 @@ public class RequestBuilder {
 	 * @param query			search terms for querying recipes
 	 * @param pageNumber	page Number to search the recipes
 	 * @return				rest url which will be sent to fatsecret platform server for searching recipes
+	 * @throws Exception	if sign throws exception
 	 */
 	public String buildRecipesSearchUrl(String query, int pageNumber) throws Exception {
 		List<String> params = new ArrayList<String>(Arrays.asList(generateOauthParams()));
@@ -247,8 +251,9 @@ public class RequestBuilder {
 	 *
 	 * @param id			the unique recipe identifier
 	 * @return				rest url which will be sent to fatsecret platform server for searching unique recipe
+	 * @throws Exception	if sign throws exception
 	 */
-	public String buildRecipeSearchUrl(Long id) throws Exception {
+	public String buildRecipeGetUrl(Long id) throws Exception {
 		List<String> params = new ArrayList<String>(Arrays.asList(generateOauthParams()));
 		String[] template = new String[1];
 		params.add("method=recipe.get");

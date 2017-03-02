@@ -22,16 +22,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.fatsecret.platform.model.CompactFood;
+import com.fatsecret.platform.model.CompactRecipe;
 import com.fatsecret.platform.model.Food;
+import com.fatsecret.platform.model.Recipe;
 import com.fatsecret.platform.utils.FoodUtility;
+import com.fatsecret.platform.utils.RecipeUtility;
 
 /**
- * This service class helps to get or search food items from fatsecret rest api
+ * This service class helps to get or search food or recipe items from fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
-public class FoodService {
+public class FatsecretService {
 	
 	/** Request Object */
 	private Request request;
@@ -42,7 +45,7 @@ public class FoodService {
 	 * @param APP_KEY		a value FatSecret API issues to you which helps this API identify you
 	 * @param APP_SECRET	a secret FatSecret API issues to you which helps this API establish that it really is you
 	 */
-	public FoodService(String APP_KEY, String APP_SECRET) {
+	public FatsecretService(String APP_KEY, String APP_SECRET) {
 		request = new Request(APP_KEY, APP_SECRET);
 	}
 	
@@ -85,7 +88,7 @@ public class FoodService {
 	 * @return				food items at a particular page number based on the query
 	 */
 	public Response<CompactFood> searchFoods(String query, Integer pageNumber) {
-		JSONObject json = request.getFoods(query, pageNumber);
+		JSONObject json = request.searchFoods(query, pageNumber);
 		try {
 			if(json != null) {
 				JSONObject foods = json.getJSONObject("foods");
@@ -96,7 +99,7 @@ public class FoodService {
 				List<CompactFood> results = new ArrayList<CompactFood>();
 				
 				if(totalResults > maxResults * pageNumber) {
-					 JSONArray food = foods.getJSONArray("food");
+					JSONArray food = foods.getJSONArray("food");
 					results = FoodUtility.parseCompactFoodListFromJSONArray(food);
 				}
 				
@@ -115,4 +118,72 @@ public class FoodService {
 		
 		return null;
 	}	
+
+	/**
+	 * Returns detailed information for the specified recipe
+	 *
+	 * @param recipeId		the unique recipe identifier
+	 * @return				detailed information for the specified recipe
+	 */
+	public Recipe getRecipe(Long recipeId) {
+		JSONObject response = request.getRecipe(recipeId);
+		
+		try {
+			if(response != null) {
+				JSONObject recipe = response.getJSONObject("recipe");
+				return RecipeUtility.parseRecipeFromJSONObject(recipe);
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Returns response associated with the recipes at zeroth page depending on the search query
+	 * 
+	 * @param query			search terms for querying recipes
+	 * @return				recipe items at zeroth page based on the query
+	 */
+	public Response<CompactRecipe> searchRecipes(String query) {
+		return searchRecipes(query, 0);
+	}
+
+	/**
+	 * Returns response associated with the recipes depending on the search query and page number
+	 * 
+	 * @param query			search terms for querying recipes
+	 * @param pageNumber	page Number to search the recipes
+	 * @return				recipe items at a particular page number based on the query
+	 */
+	public Response<CompactRecipe> searchRecipes(String query, Integer pageNumber) {
+		JSONObject json = request.searchRecipes(query, pageNumber);
+		Response<CompactRecipe> response = new Response<CompactRecipe>();
+		
+		try {
+			if(json != null) {
+				JSONObject recipes = json.getJSONObject("recipes");
+				int maxResults = recipes.getInt("max_results");
+				int totalResults = recipes.getInt("total_results");
+
+				List<CompactRecipe> results = new ArrayList<CompactRecipe>();
+				
+				if(totalResults > maxResults * pageNumber) {
+					JSONArray recipe = recipes.getJSONArray("recipe");
+					results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
+				}			
+				
+				response.setPageNumber(pageNumber);
+				response.setMaxResults(maxResults);
+				response.setTotalResults(totalResults);
+				response.setResults(results);
+				
+				return response;
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());			
+		}
+		return null;
+	}
 }

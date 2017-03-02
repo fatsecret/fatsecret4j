@@ -26,7 +26,7 @@ import org.json.JSONObject;
  * This class helps in sending requests to fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Request {
 	
@@ -50,7 +50,7 @@ public class Request {
 	 * @param pageNumber	page Number to search the food items
 	 * @return				food items at a particular page number based on the query
 	 */
-	public JSONObject getFoods(String query, int pageNumber) {
+	public JSONObject searchFoods(String query, int pageNumber) {
 
 		try {
 			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber);
@@ -71,7 +71,7 @@ public class Request {
 	public JSONObject getFood(Long id) {
 		
 		try {
-			String apiUrl = builder.buildFoodSearchUrl(id);
+			String apiUrl = builder.buildFoodGetUrl(id);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
@@ -87,7 +87,7 @@ public class Request {
 	 * @param pageNumber	page Number to search the recipes
 	 * @return				recipes at a particular page number based on the query
 	 */
-	public JSONObject getRecipes(String query, int pageNumber) {
+	public JSONObject searchRecipes(String query, int pageNumber) {
 		
 		try {
 			String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
@@ -108,7 +108,7 @@ public class Request {
 	public JSONObject getRecipe(Long id) {
 		
 		try {
-			String apiUrl = builder.buildRecipeSearchUrl(id);
+			String apiUrl = builder.buildRecipeGetUrl(id);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());

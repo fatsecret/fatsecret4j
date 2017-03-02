@@ -19,7 +19,7 @@ package com.fatsecret.platform.model;
  * This class represents summary information about the food item.
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class CompactFood {
 

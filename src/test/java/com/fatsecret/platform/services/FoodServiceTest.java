@@ -8,19 +8,19 @@ import org.junit.Test;
 import com.fatsecret.platform.model.Food;
 
 public class FoodServiceTest {
-	private FoodService foodService;
+	private FatsecretService service;
 	
 	@Before
 	public void setUp() {
-		String key = "your key";
-		String secret = "your secret";
+        String key = "3cdec5092eff49b0ab3e94030e254705";
+        String secret = "1d74956fc1c94ff5be410686d718ba22";
 
-		foodService = new FoodService(key, secret);
+        service = new FatsecretService(key, secret);
 	}
 	
 	@Test
 	public void testGetFood() {
-		Food food = foodService.getFood(285243L);
+		Food food = service.getFood(285243L);
 		assertEquals("Penne", food.getName());
 		assertEquals(4, food.getServings().size());
 		assertEquals("Generic", food.getType());
@@ -28,13 +28,13 @@ public class FoodServiceTest {
 
 	@Test
 	public void testGetFoodTypeGeneric() {
-		Food food = foodService.getFood(285243L);
+		Food food = service.getFood(285243L);
 		assertEquals("Generic", food.getType());
 	}
 
 	@Test
 	public void testGetFoodTypeBrand() {
-		Food food = foodService.getFood(1844450L);
+		Food food = service.getFood(1844450L);
 		assertEquals("Brand", food.getType());
 	}
 }

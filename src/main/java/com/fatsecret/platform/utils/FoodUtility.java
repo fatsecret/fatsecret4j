@@ -29,7 +29,7 @@ import com.fatsecret.platform.model.CompactFood;
  * This utility class helps to get detailed information about food item(s) from fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class FoodUtility {
 

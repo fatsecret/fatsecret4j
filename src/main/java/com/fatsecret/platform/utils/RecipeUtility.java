@@ -19,7 +19,7 @@ package com.fatsecret.platform.utils;
  * This utility class helps to get detailed information about recipe item(s) from fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 import java.math.BigDecimal;
 import java.util.ArrayList;

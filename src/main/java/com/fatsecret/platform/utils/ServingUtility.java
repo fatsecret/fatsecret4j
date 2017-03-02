@@ -28,7 +28,7 @@ import com.fatsecret.platform.model.Serving;
  * This utility class helps to get detailed information about serving(s) for food or recipe item(s) from fatsecret rest api
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class ServingUtility {
 	

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.fatsecret.platform.model;
 
 /**
  * This class represents a category that the recipe is classified under.
  *
  * @author Saurabh Rane
- * @version 1.0
+ * @version 2.0
  */
 public class Category {
 	
