@@ -19,11 +19,11 @@ You can use this library by downloading it [here](http://search.maven.org/remote
 
 You can use this library by downloading it [here](http://search.maven.org/remotecontent?filepath=com/fatsecret4j/fatsecret-platform/2.0/fatsecret-platform-2.0.jar) and placing it in libs folder or by following these steps -
 
-###Add the following configuration to your `build.gradle` file
+### Add the following configuration to your `build.gradle` file
 
 ```
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 android {
@@ -45,12 +45,12 @@ dependencies {
 }
 ```
 
-###Add the following line to your `Android Manifest` file
+### Add the following line to your `Android Manifest` file
 
 In order to target Android API level 24 or later, you will need to ensure that your application requests runtime permissions for internet access.
 
 ```xml
-	<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.INTERNET"/>
 ```
 
 
