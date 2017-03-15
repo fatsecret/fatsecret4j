@@ -89,6 +89,7 @@ public class FatsecretService {
 	 */
 	public Response<CompactFood> searchFoods(String query, Integer pageNumber) {
 		JSONObject json = request.searchFoods(query, pageNumber);
+
 		try {
 			if(json != null) {
 				JSONObject foods = json.getJSONObject("foods");
