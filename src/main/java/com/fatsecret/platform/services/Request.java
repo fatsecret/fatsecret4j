@@ -48,12 +48,14 @@ public class Request {
 	 * 
 	 * @param query			search terms for querying food items
 	 * @param pageNumber	page Number to search the food items
+	 * @param countryCode	country code representing the {@link com.fatsecret.platform.model.Country}
+	 * @param languageCode	language code representing the {@link com.fatsecret.platform.model.Language}
 	 * @return				food items at a particular page number based on the query
 	 */
-	public JSONObject searchFoods(String query, int pageNumber) {
+	public JSONObject searchFoods(String query, int pageNumber, String countryCode, String languageCode) {
 
 		try {
-			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber);
+			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber, countryCode, languageCode);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());

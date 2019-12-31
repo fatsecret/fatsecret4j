@@ -18,13 +18,10 @@ package com.fatsecret.platform.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fatsecret.platform.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.fatsecret.platform.model.CompactFood;
-import com.fatsecret.platform.model.CompactRecipe;
-import com.fatsecret.platform.model.Food;
-import com.fatsecret.platform.model.Recipe;
 import com.fatsecret.platform.utils.FoodUtility;
 import com.fatsecret.platform.utils.RecipeUtility;
 
@@ -88,37 +85,62 @@ public class FatsecretService {
 	 * @return				food items at a particular page number based on the query
 	 */
 	public Response<CompactFood> searchFoods(String query, Integer pageNumber) {
-		JSONObject json = request.searchFoods(query, pageNumber);
+		return searchFoods(query, pageNumber, Country.UNITED_STATES, Language.ENGLISH);
+	}
+
+	/**
+	 * Returns response associated with the food items depending on the search query and the localization.
+	 *
+	 * @param query			search terms for querying food items
+	 * @param country		localization country
+	 * @param language		localization country
+	 * @return				food items at zeroth page base on the query and the localization
+	 */
+	public Response<CompactFood> searchFoods(String query, Country country, Language language) {
+		return searchFoods(query, 0, country, language);
+	}
+
+	/**
+	 * Returns response associated with the food items depending on the search query, page number and localization.
+	 *
+	 * @param query			search terms for querying food items
+	 * @param pageNumber	page number to search the food items
+	 * @param country		localization country
+	 * @param language		localization language
+	 * @return				food items at a particular page number based on the query and the localization
+	 */
+	public Response<CompactFood> searchFoods(String query, Integer pageNumber, Country country, Language language) {
+		JSONObject json = request.searchFoods(query, pageNumber, country.getCode(), language.getCode());
 
 		try {
 			if(json != null) {
 				JSONObject foods = json.getJSONObject("foods");
-				
+
 				int maxResults = foods.getInt("max_results");
 				int totalResults = foods.getInt("total_results");
-				
+
 				List<CompactFood> results = new ArrayList<CompactFood>();
-				
+
 				if(totalResults > maxResults * pageNumber) {
 					JSONArray food = foods.getJSONArray("food");
 					results = FoodUtility.parseCompactFoodListFromJSONArray(food);
 				}
-				
+
 				Response<CompactFood> response = new Response<CompactFood>();
-				
+
 				response.setPageNumber(pageNumber);
 				response.setMaxResults(maxResults);
 				response.setTotalResults(totalResults);
 				response.setResults(results);
-				
+
 				return response;
 			}
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
-		
+
 		return null;
-	}	
+	}
 
 	/**
 	 * Returns detailed information for the specified recipe
