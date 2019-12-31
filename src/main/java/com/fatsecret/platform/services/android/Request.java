@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fatsecret.platform.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,10 +30,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 
-import com.fatsecret.platform.model.CompactFood;
-import com.fatsecret.platform.model.CompactRecipe;
-import com.fatsecret.platform.model.Food;
-import com.fatsecret.platform.model.Recipe;
 import com.fatsecret.platform.utils.FoodUtility;
 import com.fatsecret.platform.utils.RecipeUtility;
 import com.fatsecret.platform.services.RequestBuilder;
@@ -82,7 +79,7 @@ public class Request {
 	 * @param query			search terms for querying food items
 	 */
 	public void searchFoods(RequestQueue queue, String query) {
-		searchFoods(queue, query, 0);
+		searchFoods(queue, query, 0, Country.UNITED_STATES.getCode(), Language.ENGLISH.getCode());
 	}
 
 	/**
@@ -91,11 +88,13 @@ public class Request {
 	 * @param queue			the request queue for android requests
 	 * @param query			search terms for querying food items
 	 * @param pageNumber	page Number to search the food items
+	 * @param countryCode	country code representing the {@link com.fatsecret.platform.model.Country}
+	 * @param languageCode	language code representing the {@link com.fatsecret.platform.model.Language}
 	 */
-	public void searchFoods(RequestQueue queue, String query, int pageNumber) {
+	public void searchFoods(RequestQueue queue, String query, int pageNumber, String countryCode, String languageCode) {
 
 		try {
-			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber);
+			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber, countryCode, languageCode);
 			getResponse(queue, apiUrl, Request.Method.SEARCH_FOODS);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
