@@ -40,14 +40,14 @@ public class FoodUtility {
 	 * @return				detailed information about the food
 	 */
 	public static Food parseFoodFromJSONObject(JSONObject json) {
-		String name = json.getString("food_name");
-		String url = json.getString("food_url");
-		String type = json.getString("food_type");
-		Long id = Long.parseLong(json.getString("food_id"));
+		String name = JsonUtility.getPropertyValue(json, "food_name");
+		String url = JsonUtility.getPropertyValue(json, "food_url");
+		String type = JsonUtility.getPropertyValue(json, "food_type");
+		Long id = Long.parseLong(JsonUtility.getPropertyValue(json, "food_id"));
 		String brandName = "";
 		
 		try {
-			brandName = json.getString("brand_name");
+			brandName = JsonUtility.getPropertyValue(json, "brand_name");
 		} catch(Exception ignore) {
 		}
 
@@ -94,16 +94,14 @@ public class FoodUtility {
 	 */
 	public static CompactFood parseCompactFoodFromJSONObject(JSONObject json) {
 		
-		String name = json.getString("food_name");
-		String url = json.getString("food_url");
-		String type = json.getString("food_type");
-		String description = json.getString("food_description");
-		Long id = Long.parseLong(json.getString("food_id"));
+		String name = JsonUtility.getPropertyValue(json, "food_name");
+		String type = JsonUtility.getPropertyValue(json, "food_type");
+		String description = JsonUtility.getPropertyValue(json, "food_description");
+		Long id = Long.parseLong(JsonUtility.getPropertyValue(json, "food_id"));
 
 		CompactFood food = new CompactFood();
 		
 		food.setName(name);
-		food.setUrl(url);
 		food.setType(type);
 		food.setDescription(description);
 		food.setId(id);
