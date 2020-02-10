@@ -53,8 +53,20 @@ public class FatsecretService {
 	 * @return				food based on the identifier
 	 */
 	public Food getFood(Long foodId) {
-		JSONObject response = request.getFood(foodId);
-		
+		return getFood(foodId, Country.UNITED_STATES, Language.ENGLISH);
+	}
+
+	/**
+	 * Returns detailed nutritional information for the specified food
+	 *
+	 * @param foodId		the unique food identifier
+	 * @param country		localization country
+	 * @param language		localization language
+	 * @return				food based on the identifier
+	 */
+	public Food getFood(Long foodId, Country country, Language language) {
+		JSONObject response = request.getFood(foodId, country.getCode(), language.getCode());
+
 		try {
 			if(response != null) {
 				JSONObject food = response.getJSONObject("food");
@@ -63,7 +75,7 @@ public class FatsecretService {
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
-		
+
 		return null;
 	}
 	
@@ -93,7 +105,7 @@ public class FatsecretService {
 	 *
 	 * @param query			search terms for querying food items
 	 * @param country		localization country
-	 * @param language		localization country
+	 * @param language		localization language
 	 * @return				food items at zeroth page base on the query and the localization
 	 */
 	public Response<CompactFood> searchFoods(String query, Country country, Language language) {

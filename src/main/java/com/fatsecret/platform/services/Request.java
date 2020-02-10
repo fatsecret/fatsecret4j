@@ -68,12 +68,14 @@ public class Request {
 	 * Returns the json object associated with the food id with nutritional information
 	 *
 	 * @param id			the unique food identifier
+	 * @param countryCode	country code representing the {@link com.fatsecret.platform.model.Country}
+	 * @param languageCode	language code representing the {@link com.fatsecret.platform.model.Language}
 	 * @return				food based on the identifier
 	 */
-	public JSONObject getFood(Long id) {
+	public JSONObject getFood(Long id, String countryCode, String languageCode) {
 		
 		try {
-			String apiUrl = builder.buildFoodGetUrl(id);
+			String apiUrl = builder.buildFoodGetUrl(id, countryCode, languageCode);
 			return getJSONResponse(apiUrl);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
@@ -136,9 +138,7 @@ public class Request {
 
 			while ((line = reader.readLine()) != null) builder.append(line);
 
-			JSONObject json = new JSONObject(builder.toString());
-
-			return json;
+			return new JSONObject(builder.toString());
 		} catch(Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}

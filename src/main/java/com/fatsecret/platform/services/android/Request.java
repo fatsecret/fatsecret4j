@@ -106,11 +106,13 @@ public class Request {
 	 *
 	 * @param queue			the request queue for android requests
 	 * @param id			the unique food identifier
+	 * @param countryCode	country code representing the {@link com.fatsecret.platform.model.Country}
+	 * @param languageCode	language code representing the {@link com.fatsecret.platform.model.Language}
 	 */
-	public void getFood(RequestQueue queue, Long id) {
+	public void getFood(RequestQueue queue, Long id, String countryCode, String languageCode) {
 
 		try {
-			String apiUrl = builder.buildFoodGetUrl(id);
+			String apiUrl = builder.buildFoodGetUrl(id, countryCode, languageCode);
 			getResponse(queue, apiUrl, Request.Method.GET_FOOD);
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());

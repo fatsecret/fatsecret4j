@@ -217,14 +217,18 @@ public class RequestBuilder {
 	 * Returns the rest url which will be sent to fatsecret platform server for searching unique food item
 	 *
 	 * @param id			the unique food identifier
+	 * @param countryCode	country code representing the {@link com.fatsecret.platform.model.Country}
+	 * @param languageCode	language code representing the {@link com.fatsecret.platform.model.Language}
 	 * @return				rest url which will be sent to fatsecret platform server for searching unique food item
 	 * @throws Exception	if sign throws exception
 	 */
-	public String buildFoodGetUrl(Long id) throws Exception {
+	public String buildFoodGetUrl(Long id, String countryCode, String languageCode) throws Exception {
 		List<String> params = new ArrayList<String>(Arrays.asList(generateOauthParams()));
 		String[] template = new String[1];
 		params.add("method=food.get");
 		params.add("food_id=" + id);
+		params.add("region=" + countryCode);
+		params.add("language=" + languageCode);
 		params.add("oauth_signature=" + sign(HTTP_METHOD, APP_URL, params.toArray(template)));
 
 		return APP_URL + "?" + paramify(params.toArray(template));
