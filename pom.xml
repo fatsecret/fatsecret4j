@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fatsecret4j</groupId>
 	<artifactId>fatsecret-platform</artifactId>
-	<version>2.2</version>
+	<version>2.3</version>
 	
 	<name>fatsecret4j</name>
 	<description>JAVA/ANDROID Client for using Fatsecret REST API</description>
