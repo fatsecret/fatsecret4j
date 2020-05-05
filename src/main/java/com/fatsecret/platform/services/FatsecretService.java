@@ -133,7 +133,11 @@ public class FatsecretService {
 
 				List<CompactFood> results = new ArrayList<CompactFood>();
 
-				if(totalResults > maxResults * pageNumber) {
+				if(totalResults == 1) {
+					JSONObject food = foods.getJSONObject("food");
+					CompactFood compactFood = FoodUtility.parseCompactFoodFromJSONObject(food);
+					results.add(compactFood);
+				} else if(totalResults > maxResults * pageNumber) {
 					JSONArray food = foods.getJSONArray("food");
 					results = FoodUtility.parseCompactFoodListFromJSONArray(food);
 				}
