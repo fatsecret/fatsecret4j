@@ -58,15 +58,8 @@ public class Request {
    */
   public JSONObject searchFoods(String query, int pageNumber, String countryCode,
       String languageCode) {
-
-    try {
-      String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber, countryCode, languageCode);
-      return getJSONResponse(apiUrl);
-    } catch (Exception e) {
-      System.out.println("Exception: " + e.getMessage());
-    }
-
-    return null;
+    String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber, countryCode, languageCode);
+    return getJSONResponse(apiUrl);
   }
 
   /**
@@ -80,15 +73,8 @@ public class Request {
    */
   public JSONObject getFood(Long id, String countryCode, String languageCode,
       boolean includeSubCategories) {
-
-    try {
-      String apiUrl = builder.buildFoodGetUrl(id, countryCode, languageCode, includeSubCategories);
-      return getJSONResponse(apiUrl);
-    } catch (Exception e) {
-      System.out.println("Exception: " + e.getMessage());
-    }
-
-    return null;
+    String apiUrl = builder.buildFoodGetUrl(id, countryCode, languageCode, includeSubCategories);
+    return getJSONResponse(apiUrl);
   }
 
   /**
@@ -99,15 +85,8 @@ public class Request {
    * @return recipes at a particular page number based on the query
    */
   public JSONObject searchRecipes(String query, int pageNumber) {
-
-    try {
-      String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
-      return getJSONResponse(apiUrl);
-    } catch (Exception e) {
-      System.out.println("Exception: " + e.getMessage());
-    }
-
-    return null;
+    String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
+    return getJSONResponse(apiUrl);
   }
 
   /**
@@ -118,15 +97,30 @@ public class Request {
    * @return recipe based on the identifier
    */
   public JSONObject getRecipe(Long id) {
+    String apiUrl = builder.buildRecipeGetUrl(id);
+    return getJSONResponse(apiUrl);
+  }
 
-    try {
-      String apiUrl = builder.buildRecipeGetUrl(id);
-      return getJSONResponse(apiUrl);
-    } catch (Exception e) {
-      System.out.println("Exception: " + e.getMessage());
-    }
+  /**
+   * Returns the json object associated with specific information about the sub categories of a food
+   * category.
+   *
+   * @param foodCategoryId the unique food category identifier
+   * @return sub categories for the food category
+   */
+  public JSONObject getFoodSubCategories(Long foodCategoryId) {
+    String apiUrl = builder.buildFoodSubCategoriesGetUrl(foodCategoryId);
+    return getJSONResponse(apiUrl);
+  }
 
-    return null;
+  /**
+   * Returns the json object associated with all the fatsecret food categories.
+   *
+   * @return all fatsecret food categories
+   */
+  public JSONObject getAllFoodCategories() {
+    String apiUrl = builder.buildFoodCategoriesGetUrl();
+    return getJSONResponse(apiUrl);
   }
 
   /**

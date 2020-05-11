@@ -226,8 +226,7 @@ public class RequestBuilder {
    * @param countryCode          country code representing the {@link com.fatsecret.platform.model.Country}
    * @param languageCode         language code representing the {@link com.fatsecret.platform.model.Language}
    * @param includeSubCategories flag to include sub categories in response
-   * @return rest url which will be sent to fatsecret platform server for searching unique food
-   * item
+   * @return rest url which will be sent to fatsecret platform server for searching unique food item
    */
   public String buildFoodGetUrl(Long id, String countryCode, String languageCode,
       boolean includeSubCategories) {
@@ -267,14 +266,47 @@ public class RequestBuilder {
    * recipe
    *
    * @param id the unique recipe identifier
-   * @return rest url which will be sent to fatsecret platform server for searching unique
-   * recipe
+   * @return rest url which will be sent to fatsecret platform server for searching unique recipe
    */
   public String buildRecipeGetUrl(Long id) {
     List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
     String[] template = new String[1];
     params.add("method=recipe.get");
     params.add("recipe_id=" + id);
+    params.add("oauth_signature=" + sign(HTTP_METHOD, APP_URL, params.toArray(template)));
+
+    return APP_URL + "?" + paramify(params.toArray(template));
+  }
+
+  /**
+   * Returns the rest url which will be sent to fatsecret platform server for searching unique food
+   * sub categories.
+   *
+   * @param foodCategoryId the unique food category identifier
+   * @return rest url which will be sent to fatsecret platform server for searching unique food sub
+   * categories
+   */
+  public String buildFoodSubCategoriesGetUrl(Long foodCategoryId) {
+    List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+    String[] template = new String[1];
+    params.add("method=food_sub_categories.get");
+    params.add("food_category_id=" + foodCategoryId);
+    params.add("oauth_signature=" + sign(HTTP_METHOD, APP_URL, params.toArray(template)));
+
+    return APP_URL + "?" + paramify(params.toArray(template));
+  }
+
+  /**
+   * Returns the rest url which will be sent to fatsecret platform server for retrieving all food
+   * categories.
+   *
+   * @return rest url which will be sent to fatsecret platform server for retrieving all food
+   * categories
+   */
+  public String buildFoodCategoriesGetUrl() {
+    List<String> params = new ArrayList<>(Arrays.asList(generateOauthParams()));
+    String[] template = new String[1];
+    params.add("method=food_categories.get");
     params.add("oauth_signature=" + sign(HTTP_METHOD, APP_URL, params.toArray(template)));
 
     return APP_URL + "?" + paramify(params.toArray(template));

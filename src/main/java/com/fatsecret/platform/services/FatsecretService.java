@@ -15,7 +15,9 @@
  */
 package com.fatsecret.platform.services;
 
+import com.fatsecret.platform.utils.FoodCategoryUtility;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.fatsecret.platform.model.*;
@@ -186,6 +188,21 @@ public class FatsecretService {
     }
 
     return null;
+  }
+
+  /**
+   * Returns all fatsecret food categories.
+   *
+   * @return all food categories
+   */
+  public List<FoodCategory> getAllFoodCategories() {
+    JSONObject response = request.getAllFoodCategories();
+    if (response != null) {
+      JSONObject foodCategories = response.getJSONObject("food_categories");
+      JSONArray foodCategoryList = foodCategories.getJSONArray("food_category");
+      return FoodCategoryUtility.parseFoodCategoryListFromJSONArray(foodCategoryList);
+    }
+    return Collections.emptyList();
   }
 
   /**
