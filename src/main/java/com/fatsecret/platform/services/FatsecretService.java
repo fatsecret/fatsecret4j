@@ -16,6 +16,7 @@
 package com.fatsecret.platform.services;
 
 import com.fatsecret.platform.utils.FoodCategoryUtility;
+import com.fatsecret.platform.utils.FoodSubCategoryUtility;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -201,6 +202,22 @@ public class FatsecretService {
       JSONObject foodCategories = response.getJSONObject("food_categories");
       JSONArray foodCategoryList = foodCategories.getJSONArray("food_category");
       return FoodCategoryUtility.parseFoodCategoryListFromJSONArray(foodCategoryList);
+    }
+    return Collections.emptyList();
+  }
+
+  /**
+   * Returns all the sub categories for the food category provided by its id.
+   *
+   * @param foodCategoryId food category id
+   * @return all sub categories for the food category
+   */
+  public List<FoodSubCategory> getFoodSubCategories(long foodCategoryId) {
+    JSONObject response = request.getFoodSubCategories(foodCategoryId);
+    if (response != null) {
+      JSONObject foodSubCategories = response.getJSONObject("food_sub_categories");
+      JSONArray foodSubCategoryList = foodSubCategories.getJSONArray("food_sub_category");
+      return FoodSubCategoryUtility.parseFoodSubCategoryListFromJSONArray(foodSubCategoryList);
     }
     return Collections.emptyList();
   }
