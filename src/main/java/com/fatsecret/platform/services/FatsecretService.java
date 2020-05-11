@@ -19,9 +19,11 @@ import com.fatsecret.platform.utils.FoodCategoryUtility;
 import com.fatsecret.platform.utils.FoodSubCategoryUtility;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.fatsecret.platform.model.*;
+import java.util.Optional;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,6 +88,24 @@ public class FatsecretService {
     }
 
     return null;
+  }
+
+  public DetailedFood getDetailedFood(Long foodId, Country country, Language language) {
+    Food food = getFood(foodId, country, language, true);
+    List<FoodCategory> foodCategories = getFoodCategories(food);
+    return new DetailedFood(food, foodCategories);
+  }
+
+  private List<FoodCategory> getFoodCategories(Food food) {
+    List<FoodCategory> foodCategories = new LinkedList<>();
+    List<FoodSubCategory> foodSubCategories = food.getFoodSubCategoryList();
+    List<FoodCategory> allFoodCategories = getAllFoodCategories();
+    for (FoodCategory foodCategory : allFoodCategories) {
+      List<FoodSubCategory> foodSubCategoriesForFoodCategory = getFoodSubCategories(foodCategory.getId());
+      if (!Collections.disjoint(foodSubCategories, foodSubCategoriesForFoodCategory))
+        foodCategories.add(foodCategory);
+    }
+    return foodCategories;
   }
 
   /**

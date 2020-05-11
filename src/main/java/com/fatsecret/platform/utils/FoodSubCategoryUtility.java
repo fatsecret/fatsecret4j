@@ -24,4 +24,15 @@ public class FoodSubCategoryUtility {
     return foodSubCategories;
   }
 
+  /**
+   * Returns a food sub category.
+   *
+   * @param object json object representing the food category
+   * @return food category
+   */
+  public static FoodSubCategory parseFoodSubCategoryFromJSONObject(JSONObject object) {
+    String name = object.getString("food_sub_category");
+    return new FoodSubCategory(name);
+  }
+
 }

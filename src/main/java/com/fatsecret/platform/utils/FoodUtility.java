@@ -15,7 +15,9 @@
  */
 package com.fatsecret.platform.utils;
 
+import com.fatsecret.platform.model.FoodSubCategory;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import java.util.Objects;
@@ -75,6 +77,27 @@ public class FoodUtility {
       }
     }
 
+    JSONObject foodSubCategoriesObject = json.getJSONObject("food_sub_categories");
+
+    List<FoodSubCategory> foodSubCategories = new LinkedList<>();
+
+    try {
+      array = foodSubCategoriesObject.getJSONArray("food_sub_category");
+      foodSubCategories = FoodSubCategoryUtility.parseFoodSubCategoryListFromJSONArray(array);
+    } catch (Exception ignore) {
+      System.out.println("Food sub categories not found");
+      array = null;
+    }
+
+    if (array == null) {
+      try {
+        FoodSubCategory foodSubCategory = FoodSubCategoryUtility.parseFoodSubCategoryFromJSONObject(foodSubCategoriesObject);
+        foodSubCategories.add(foodSubCategory);
+      } catch (Exception ignore) {
+        System.out.println("Food sub category not found");
+      }
+    }
+
     Food food = new Food();
 
     food.setName(name);
@@ -83,6 +106,7 @@ public class FoodUtility {
     food.setId(id);
     food.setBrandName(brandName);
     food.setServings(servings);
+    food.setFoodSubCategoryList(foodSubCategories);
 
     return food;
   }

@@ -1,14 +1,14 @@
 package com.fatsecret.platform.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
+@EqualsAndHashCode
 public class FoodSubCategory {
 
   private final String name;
 
-  public FoodSubCategory(String name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return name;
-  }
 }
