@@ -32,197 +32,206 @@ import com.fatsecret.platform.utils.RecipeUtility;
  * @version 2.0
  */
 public class FatsecretService {
-	
-	/** Request Object */
-	private Request request;
-	
-	/**
-	 * Constructor to set values for APP_KEY and APP_SECRET
-	 *
-	 * @param APP_KEY		a value FatSecret API issues to you which helps this API identify you
-	 * @param APP_SECRET	a secret FatSecret API issues to you which helps this API establish that it really is you
-	 */
-	public FatsecretService(String APP_KEY, String APP_SECRET) {
-		request = new Request(APP_KEY, APP_SECRET);
-	}
-	
-	/**
-	 * Returns detailed nutritional information for the specified food
-	 *
-	 * @param foodId		the unique food identifier
-	 * @return				food based on the identifier
-	 */
-	public Food getFood(Long foodId) {
-		return getFood(foodId, Country.UNITED_STATES, Language.ENGLISH);
-	}
 
-	/**
-	 * Returns detailed nutritional information for the specified food
-	 *
-	 * @param foodId		the unique food identifier
-	 * @param country		localization country
-	 * @param language		localization language
-	 * @return				food based on the identifier
-	 */
-	public Food getFood(Long foodId, Country country, Language language) {
-		JSONObject response = request.getFood(foodId, country.getCode(), language.getCode());
+  /**
+   * Request Object
+   */
+  private final Request request;
 
-		try {
-			if(response != null) {
-				JSONObject food = response.getJSONObject("food");
-				return FoodUtility.parseFoodFromJSONObject(food);
-			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
+  /**
+   * Constructor to set values for APP_KEY and APP_SECRET
+   *
+   * @param APP_KEY    a value FatSecret API issues to you which helps this API identify you
+   * @param APP_SECRET a secret FatSecret API issues to you which helps this API establish that it
+   *                   really is you
+   */
+  public FatsecretService(String APP_KEY, String APP_SECRET) {
+    request = new Request(APP_KEY, APP_SECRET);
+  }
 
-		return null;
-	}
-	
-	/**
-	 * Returns response associated with the food items at zeroth page depending on the search query
-	 * 
-	 * @param query			search terms for querying food items
-	 * @return				food items at zeroth page based on the query
-	 */
-	public Response<CompactFood> searchFoods(String query) {
-		return searchFoods(query, 0);
-	}
+  /**
+   * Returns detailed nutritional information for the specified food
+   *
+   * @param foodId the unique food identifier
+   * @return food based on the identifier
+   */
+  public Food getFood(Long foodId) {
+    return getFood(foodId, Country.UNITED_STATES, Language.ENGLISH, false);
+  }
 
-	/**
-	 * Returns response associated with the food items depending on the search query and page number
-	 * 
-	 * @param query			search terms for querying food items
-	 * @param pageNumber	page Number to search the food items
-	 * @return				food items at a particular page number based on the query
-	 */
-	public Response<CompactFood> searchFoods(String query, Integer pageNumber) {
-		return searchFoods(query, pageNumber, Country.UNITED_STATES, Language.ENGLISH);
-	}
+  /**
+   * Returns detailed nutritional information for the specified food
+   *
+   * @param foodId               the unique food identifier
+   * @param country              localization country
+   * @param language             localization language
+   * @param includeSubCategories flag to include sub categories in response
+   * @return food based on the identifier
+   */
+  public Food getFood(Long foodId, Country country, Language language,
+      boolean includeSubCategories) {
+    JSONObject response = request
+        .getFood(foodId, country.getCode(), language.getCode(), includeSubCategories);
 
-	/**
-	 * Returns response associated with the food items depending on the search query and the localization.
-	 *
-	 * @param query			search terms for querying food items
-	 * @param country		localization country
-	 * @param language		localization language
-	 * @return				food items at zeroth page base on the query and the localization
-	 */
-	public Response<CompactFood> searchFoods(String query, Country country, Language language) {
-		return searchFoods(query, 0, country, language);
-	}
+    try {
+      if (response != null) {
+        JSONObject food = response.getJSONObject("food");
+        return FoodUtility.parseFoodFromJSONObject(food);
+      }
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
 
-	/**
-	 * Returns response associated with the food items depending on the search query, page number and localization.
-	 *
-	 * @param query			search terms for querying food items
-	 * @param pageNumber	page number to search the food items
-	 * @param country		localization country
-	 * @param language		localization language
-	 * @return				food items at a particular page number based on the query and the localization
-	 */
-	public Response<CompactFood> searchFoods(String query, Integer pageNumber, Country country, Language language) {
-		JSONObject json = request.searchFoods(query, pageNumber, country.getCode(), language.getCode());
+    return null;
+  }
 
-		try {
-			if(json != null) {
-				JSONObject foods = json.getJSONObject("foods");
+  /**
+   * Returns response associated with the food items at zeroth page depending on the search query
+   *
+   * @param query search terms for querying food items
+   * @return food items at zeroth page based on the query
+   */
+  public Response<CompactFood> searchFoods(String query) {
+    return searchFoods(query, 0);
+  }
 
-				int maxResults = foods.getInt("max_results");
-				int totalResults = foods.getInt("total_results");
+  /**
+   * Returns response associated with the food items depending on the search query and page number
+   *
+   * @param query      search terms for querying food items
+   * @param pageNumber page Number to search the food items
+   * @return food items at a particular page number based on the query
+   */
+  public Response<CompactFood> searchFoods(String query, Integer pageNumber) {
+    return searchFoods(query, pageNumber, Country.UNITED_STATES, Language.ENGLISH);
+  }
 
-				List<CompactFood> results = new ArrayList<CompactFood>();
+  /**
+   * Returns response associated with the food items depending on the search query and the
+   * localization.
+   *
+   * @param query    search terms for querying food items
+   * @param country  localization country
+   * @param language localization language
+   * @return food items at zeroth page base on the query and the localization
+   */
+  public Response<CompactFood> searchFoods(String query, Country country, Language language) {
+    return searchFoods(query, 0, country, language);
+  }
 
-				if(totalResults == 1) {
-					JSONObject food = foods.getJSONObject("food");
-					CompactFood compactFood = FoodUtility.parseCompactFoodFromJSONObject(food);
-					results.add(compactFood);
-				} else if(totalResults > maxResults * pageNumber) {
-					JSONArray food = foods.getJSONArray("food");
-					results = FoodUtility.parseCompactFoodListFromJSONArray(food);
-				}
+  /**
+   * Returns response associated with the food items depending on the search query, page number and
+   * localization.
+   *
+   * @param query      search terms for querying food items
+   * @param pageNumber page number to search the food items
+   * @param country    localization country
+   * @param language   localization language
+   * @return food items at a particular page number based on the query and the localization
+   */
+  public Response<CompactFood> searchFoods(String query, Integer pageNumber, Country country,
+      Language language) {
+    JSONObject json = request.searchFoods(query, pageNumber, country.getCode(), language.getCode());
 
-				Response<CompactFood> response = new Response<CompactFood>();
+    try {
+      if (json != null) {
+        JSONObject foods = json.getJSONObject("foods");
 
-				response.setPageNumber(pageNumber);
-				response.setMaxResults(maxResults);
-				response.setTotalResults(totalResults);
-				response.setResults(results);
+        int maxResults = foods.getInt("max_results");
+        int totalResults = foods.getInt("total_results");
 
-				return response;
-			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
+        List<CompactFood> results = new ArrayList<>();
 
-		return null;
-	}
+        if (totalResults == 1) {
+          JSONObject food = foods.getJSONObject("food");
+          CompactFood compactFood = FoodUtility.parseCompactFoodFromJSONObject(food);
+          results.add(compactFood);
+        } else if (totalResults > maxResults * pageNumber) {
+          JSONArray food = foods.getJSONArray("food");
+          results = FoodUtility.parseCompactFoodListFromJSONArray(food);
+        }
 
-	/**
-	 * Returns detailed information for the specified recipe
-	 *
-	 * @param recipeId		the unique recipe identifier
-	 * @return				detailed information for the specified recipe
-	 */
-	public Recipe getRecipe(Long recipeId) {
-		JSONObject response = request.getRecipe(recipeId);
-		
-		try {
-			if(response != null) {
-				JSONObject recipe = response.getJSONObject("recipe");
-				return RecipeUtility.parseRecipeFromJSONObject(recipe);
-			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Returns response associated with the recipes at zeroth page depending on the search query
-	 * 
-	 * @param query			search terms for querying recipes
-	 * @return				recipe items at zeroth page based on the query
-	 */
-	public Response<CompactRecipe> searchRecipes(String query) {
-		return searchRecipes(query, 0);
-	}
+        Response<CompactFood> response = new Response<>();
 
-	/**
-	 * Returns response associated with the recipes depending on the search query and page number
-	 * 
-	 * @param query			search terms for querying recipes
-	 * @param pageNumber	page Number to search the recipes
-	 * @return				recipe items at a particular page number based on the query
-	 */
-	public Response<CompactRecipe> searchRecipes(String query, Integer pageNumber) {
-		JSONObject json = request.searchRecipes(query, pageNumber);
-		Response<CompactRecipe> response = new Response<CompactRecipe>();
-		
-		try {
-			if(json != null) {
-				JSONObject recipes = json.getJSONObject("recipes");
-				int maxResults = recipes.getInt("max_results");
-				int totalResults = recipes.getInt("total_results");
+        response.setPageNumber(pageNumber);
+        response.setMaxResults(maxResults);
+        response.setTotalResults(totalResults);
+        response.setResults(results);
 
-				List<CompactRecipe> results = new ArrayList<CompactRecipe>();
-				
-				if(totalResults > maxResults * pageNumber) {
-					JSONArray recipe = recipes.getJSONArray("recipe");
-					results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
-				}			
-				
-				response.setPageNumber(pageNumber);
-				response.setMaxResults(maxResults);
-				response.setTotalResults(totalResults);
-				response.setResults(results);
-				
-				return response;
-			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());			
-		}
-		return null;
-	}
+        return response;
+      }
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
+
+    return null;
+  }
+
+  /**
+   * Returns detailed information for the specified recipe
+   *
+   * @param recipeId the unique recipe identifier
+   * @return detailed information for the specified recipe
+   */
+  public Recipe getRecipe(Long recipeId) {
+    JSONObject response = request.getRecipe(recipeId);
+
+    try {
+      if (response != null) {
+        JSONObject recipe = response.getJSONObject("recipe");
+        return RecipeUtility.parseRecipeFromJSONObject(recipe);
+      }
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
+
+    return null;
+  }
+
+  /**
+   * Returns response associated with the recipes at zeroth page depending on the search query
+   *
+   * @param query search terms for querying recipes
+   * @return recipe items at zeroth page based on the query
+   */
+  public Response<CompactRecipe> searchRecipes(String query) {
+    return searchRecipes(query, 0);
+  }
+
+  /**
+   * Returns response associated with the recipes depending on the search query and page number
+   *
+   * @param query      search terms for querying recipes
+   * @param pageNumber page Number to search the recipes
+   * @return recipe items at a particular page number based on the query
+   */
+  public Response<CompactRecipe> searchRecipes(String query, Integer pageNumber) {
+    JSONObject json = request.searchRecipes(query, pageNumber);
+    Response<CompactRecipe> response = new Response<>();
+
+    try {
+      if (json != null) {
+        JSONObject recipes = json.getJSONObject("recipes");
+        int maxResults = recipes.getInt("max_results");
+        int totalResults = recipes.getInt("total_results");
+
+        List<CompactRecipe> results = new ArrayList<>();
+
+        if (totalResults > maxResults * pageNumber) {
+          JSONArray recipe = recipes.getJSONArray("recipe");
+          results = RecipeUtility.parseCompactRecipeListFromJSONArray(recipe);
+        }
+
+        response.setPageNumber(pageNumber);
+        response.setMaxResults(maxResults);
+        response.setTotalResults(totalResults);
+        response.setResults(results);
+
+        return response;
+      }
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
+    return null;
+  }
 }
