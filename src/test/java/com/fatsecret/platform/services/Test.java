@@ -2,18 +2,13 @@ package com.fatsecret.platform.services;
 
 import java.util.List;
 
-import com.fatsecret.platform.model.CompactFood;
-import com.fatsecret.platform.model.CompactRecipe;
-import com.fatsecret.platform.model.Direction;
-import com.fatsecret.platform.model.Food;
-import com.fatsecret.platform.model.Ingredient;
-import com.fatsecret.platform.model.Recipe;
+import com.fatsecret.platform.model.*;
 
 public class Test {
 
 	public static void main(String[] args) {
-        String key = "your key";
-        String secret = "your secret";
+        String key = "d93162ff153c49518a6583c6f644fc37";
+        String secret = "3f8d8352d8b24b9cbccc801d35d65713";
 		
         FatsecretService service = new FatsecretService(key, secret);
         service.getRecipe(315L);
@@ -50,11 +45,24 @@ public class Test {
 			System.out.println(ingredient.getName() + " - " + ingredient.getNumberOfUnits() + " " + ingredient.getMeasurementDescription());
 		}
 		
-		Food food = service.getFood(60810L);
+		Food food = service.getFood(4337L, Country.SWITZERLAND, Language.ENGLISH, true);
 		System.out.println("==>> Food");
 		System.out.println("Food: " + food.getName());
+
+		List<FoodCategory> allFoodCategories = service.getAllFoodCategories();
+		System.out.println("==>> Food categories");
+		System.out.println("Size: " + allFoodCategories.size());
+
+		List<FoodSubCategory> foodSubCategories = service.getFoodSubCategories(1);
+		System.out.println("==>> Food sub categories");
+		System.out.println("Size: " + foodSubCategories.size());
+
+		DetailedFood detailedFood = service.getDetailedFood(20689071L, Country.UNITED_STATES, Language.ENGLISH);
+		System.out.println("==>> Detailed food");
+		System.out.println("Food: " + detailedFood.getName());
+		System.out.println("Amount of food categories: " + detailedFood.getFoodCategories().size());
 		
-		Response<CompactFood> res = service.searchFoods("biryani", 1);
+		Response<CompactFood> res = service.searchFoods("Zitronenkuchen", 0, Country.SWITZERLAND, Language.GERMAN);
 		System.out.println("==>> Response");
 		System.out.println("Total: " + res.getTotalResults());
 		System.out.println("Max: " + res.getMaxResults());

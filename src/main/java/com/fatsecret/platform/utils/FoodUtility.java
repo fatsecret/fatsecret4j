@@ -77,25 +77,29 @@ public class FoodUtility {
       }
     }
 
-    JSONObject foodSubCategoriesObject = json.getJSONObject("food_sub_categories");
-
     List<FoodSubCategory> foodSubCategories = new LinkedList<>();
 
     try {
-      array = foodSubCategoriesObject.getJSONArray("food_sub_category");
-      foodSubCategories = FoodSubCategoryUtility.parseFoodSubCategoryListFromJSONArray(array);
-    } catch (Exception ignore) {
-      System.out.println("Food sub categories not found");
-      array = null;
-    }
+      JSONObject foodSubCategoriesObject = json.getJSONObject("food_sub_categories");
 
-    if (array == null) {
       try {
-        FoodSubCategory foodSubCategory = FoodSubCategoryUtility.parseFoodSubCategoryFromJSONObject(foodSubCategoriesObject);
-        foodSubCategories.add(foodSubCategory);
+        array = foodSubCategoriesObject.getJSONArray("food_sub_category");
+        foodSubCategories = FoodSubCategoryUtility.parseFoodSubCategoryListFromJSONArray(array);
       } catch (Exception ignore) {
-        System.out.println("Food sub category not found");
+        System.out.println("Food sub categories not found");
+        array = null;
       }
+
+      if (array == null) {
+        try {
+          FoodSubCategory foodSubCategory = FoodSubCategoryUtility.parseFoodSubCategoryFromJSONObject(foodSubCategoriesObject);
+          foodSubCategories.add(foodSubCategory);
+        } catch (Exception ignore) {
+          System.out.println("Food sub category not found");
+        }
+      }
+    } catch (Exception ignore) {
+      System.out.println("Not a single food sub category found");
     }
 
     Food food = new Food();

@@ -14,6 +14,8 @@ public class DetailedFood extends Food {
     this.type = food.type;
     this.url = food.url;
     this.foodCategories = foodCategories;
+    this.setServings(food.getServings());
+    this.setFoodSubCategoryList(food.getFoodSubCategoryList());
   }
 
   public List<FoodCategory> getFoodCategories() {
