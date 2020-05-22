@@ -15,9 +15,12 @@
  */
 package com.fatsecret.platform.utils;
 
+import com.fatsecret.platform.model.FoodSubCategory;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,101 +36,125 @@ import com.fatsecret.platform.model.CompactFood;
  */
 public class FoodUtility {
 
-	/**
-	 * Returns detailed information about the food
-	 * 
-	 * @param json			json object representing of the food
-	 * @return				detailed information about the food
-	 */
-	public static Food parseFoodFromJSONObject(JSONObject json) {
-		String name = json.getString("food_name");
-		String url = json.getString("food_url");
-		String type = json.getString("food_type");
-		Long id = Long.parseLong(json.getString("food_id"));
-		String brandName = "";
-		
-		try {
-			brandName = json.getString("brand_name");
-		} catch(Exception ignore) {
-		}
+  /**
+   * Returns detailed information about the food
+   *
+   * @param json json object representing of the food
+   * @return detailed information about the food
+   */
+  public static Food parseFoodFromJSONObject(JSONObject json) {
+    String name = JsonUtility.getPropertyValue(json, "food_name");
+    String url = JsonUtility.getPropertyValue(json, "food_url");
+    String type = JsonUtility.getPropertyValue(json, "food_type");
+    Long id = Long.parseLong(Objects.requireNonNull(JsonUtility.getPropertyValue(json, "food_id")));
+    String brandName = "";
 
-		JSONObject servingsObj = json.getJSONObject("servings");
-		
-		JSONArray array = null;
-		List<Serving> servings = new ArrayList<Serving>();
-		
-		try {
-			array = servingsObj.getJSONArray("serving");
-			servings = ServingUtility.parseServingsFromJSONArray(array);
-		} catch(Exception ignore) {
-			System.out.println("Servings not found");
-			array = null;
-		}
-		
-		if(array == null) {
-			try {
-				JSONObject servingObj = servingsObj.getJSONObject("serving");
-				Serving serving = ServingUtility.parseServingFromJSONObject(servingObj);
-				servings.add(serving);
-			} catch(Exception ignore) {
-				System.out.println("Serving not found");
-			}
-		}
+    try {
+      brandName = JsonUtility.getPropertyValue(json, "brand_name");
+    } catch (Exception ignore) {
+    }
 
-		Food food = new Food();
-		
-		food.setName(name);
-		food.setUrl(url);
-		food.setType(type);
-		food.setId(id);
-		food.setBrandName(brandName);
-		food.setServings(servings);
-		
-		return food;
-	}
-	
-	/**
-	 * Returns information about the compact food
-	 * 
-	 * @param json			json object representing of the food
-	 * @return				compact food object from the json
-	 */
-	public static CompactFood parseCompactFoodFromJSONObject(JSONObject json) {
-		
-		String name = json.getString("food_name");
-		String url = json.getString("food_url");
-		String type = json.getString("food_type");
-		String description = json.getString("food_description");
-		Long id = Long.parseLong(json.getString("food_id"));
+    JSONObject servingsObj = json.getJSONObject("servings");
 
-		CompactFood food = new CompactFood();
-		
-		food.setName(name);
-		food.setUrl(url);
-		food.setType(type);
-		food.setDescription(description);
-		food.setId(id);
-		
-		return food;
-	}
+    JSONArray array;
+    List<Serving> servings = new ArrayList<>();
 
-	/**
-	 * Returns a list of compact food items
-	 * 
-	 * @param array			json array representing a list of compact food
-	 * @return				list of compact food items
-	 */
-	public static List<CompactFood> parseCompactFoodListFromJSONArray(JSONArray array) {
-		List<CompactFood> foods = new ArrayList<CompactFood>();
-		
-		for(int i = 0; i < array.length(); i++) {
-			JSONObject obj = array.getJSONObject(i);
-			
-			CompactFood food = parseCompactFoodFromJSONObject(obj);
-			
-			foods.add(food);
-		}
-		
-		return foods;
-	}
+    try {
+      array = servingsObj.getJSONArray("serving");
+      servings = ServingUtility.parseServingsFromJSONArray(array);
+    } catch (Exception ignore) {
+      System.out.println("Servings not found");
+      array = null;
+    }
+
+    if (array == null) {
+      try {
+        JSONObject servingObj = servingsObj.getJSONObject("serving");
+        Serving serving = ServingUtility.parseServingFromJSONObject(servingObj);
+        servings.add(serving);
+      } catch (Exception ignore) {
+        System.out.println("Serving not found");
+      }
+    }
+
+    List<FoodSubCategory> foodSubCategories = new LinkedList<>();
+
+    try {
+      JSONObject foodSubCategoriesObject = json.getJSONObject("food_sub_categories");
+
+      try {
+        array = foodSubCategoriesObject.getJSONArray("food_sub_category");
+        foodSubCategories = FoodSubCategoryUtility.parseFoodSubCategoryListFromJSONArray(array);
+      } catch (Exception ignore) {
+        System.out.println("Food sub categories not found");
+        array = null;
+      }
+
+      if (array == null) {
+        try {
+          FoodSubCategory foodSubCategory = FoodSubCategoryUtility.parseFoodSubCategoryFromJSONObject(foodSubCategoriesObject);
+          foodSubCategories.add(foodSubCategory);
+        } catch (Exception ignore) {
+          System.out.println("Food sub category not found");
+        }
+      }
+    } catch (Exception ignore) {
+      System.out.println("Not a single food sub category found");
+    }
+
+    Food food = new Food();
+
+    food.setName(name);
+    food.setUrl(url);
+    food.setType(type);
+    food.setId(id);
+    food.setBrandName(brandName);
+    food.setServings(servings);
+    food.setFoodSubCategoryList(foodSubCategories);
+
+    return food;
+  }
+
+  /**
+   * Returns information about the compact food
+   *
+   * @param json json object representing of the food
+   * @return compact food object from the json
+   */
+  public static CompactFood parseCompactFoodFromJSONObject(JSONObject json) {
+
+    String name = JsonUtility.getPropertyValue(json, "food_name");
+    String type = JsonUtility.getPropertyValue(json, "food_type");
+    String description = JsonUtility.getPropertyValue(json, "food_description");
+    Long id = Long.parseLong(Objects.requireNonNull(JsonUtility.getPropertyValue(json, "food_id")));
+
+    CompactFood food = new CompactFood();
+
+    food.setName(name);
+    food.setType(type);
+    food.setDescription(description);
+    food.setId(id);
+
+    return food;
+  }
+
+  /**
+   * Returns a list of compact food items
+   *
+   * @param array json array representing a list of compact food
+   * @return list of compact food items
+   */
+  public static List<CompactFood> parseCompactFoodListFromJSONArray(JSONArray array) {
+    List<CompactFood> foods = new ArrayList<>();
+
+    for (int i = 0; i < array.length(); i++) {
+      JSONObject obj = array.getJSONObject(i);
+
+      CompactFood food = parseCompactFoodFromJSONObject(obj);
+
+      foods.add(food);
+    }
+
+    return foods;
+  }
 }

@@ -29,118 +29,124 @@ import org.json.JSONObject;
  * @version 2.0
  */
 public class Request {
-	
-	/** Request Builder */
-	private RequestBuilder builder;
-	
-	/**
-	 * Constructor to set values for APP_KEY and APP_SECRET
-	 *
-	 * @param APP_KEY 		a value FatSecret API issues to you which helps this API identify you
-	 * @param APP_SECRET	a secret FatSecret API issues to you which helps this API establish that it really is you
-	 */
-	public Request(String APP_KEY, String APP_SECRET) {
-		builder = new RequestBuilder(APP_KEY, APP_SECRET);
-	}
-	
-	/**
-	 * Returns the json object associated with the food items depending on the search query and page number
-	 * 
-	 * @param query			search terms for querying food items
-	 * @param pageNumber	page Number to search the food items
-	 * @return				food items at a particular page number based on the query
-	 */
-	public JSONObject searchFoods(String query, int pageNumber) {
 
-		try {
-			String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber);
-			return getJSONResponse(apiUrl);
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
+  /**
+   * Request Builder
+   */
+  private final RequestBuilder builder;
 
-	/**
-	 * Returns the json object associated with the food id with nutritional information
-	 *
-	 * @param id			the unique food identifier
-	 * @return				food based on the identifier
-	 */
-	public JSONObject getFood(Long id) {
-		
-		try {
-			String apiUrl = builder.buildFoodGetUrl(id);
-			return getJSONResponse(apiUrl);
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
+  /**
+   * Constructor to set values for APP_KEY and APP_SECRET
+   *
+   * @param APP_KEY    a value FatSecret API issues to you which helps this API identify you
+   * @param APP_SECRET a secret FatSecret API issues to you which helps this API establish that it
+   *                   really is you
+   */
+  public Request(String APP_KEY, String APP_SECRET) {
+    builder = new RequestBuilder(APP_KEY, APP_SECRET);
+  }
 
-	/**
-	 * Returns the json object associated with the recipes depending on the search query
-	 *
-	 * @param query			search terms for querying recipes
-	 * @param pageNumber	page Number to search the recipes
-	 * @return				recipes at a particular page number based on the query
-	 */
-	public JSONObject searchRecipes(String query, int pageNumber) {
-		
-		try {
-			String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
-			return getJSONResponse(apiUrl);
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
+  /**
+   * Returns the json object associated with the food items depending on the search query and page
+   * number
+   *
+   * @param query        search terms for querying food items
+   * @param pageNumber   page Number to search the food items
+   * @param countryCode  country code representing the {@link com.fatsecret.platform.model.Country}
+   * @param languageCode language code representing the {@link com.fatsecret.platform.model.Language}
+   * @return food items at a particular page number based on the query
+   */
+  public JSONObject searchFoods(String query, int pageNumber, String countryCode,
+      String languageCode) {
+    String apiUrl = builder.buildFoodsSearchUrl(query, pageNumber, countryCode, languageCode);
+    return getJSONResponse(apiUrl);
+  }
 
-	/**
-	 * Returns the json object associated with general information about the recipe item with detailed nutritional information for the standard serving
-	 *
-	 * @param id			the unique recipe identifier
-	 * @return				recipe based on the identifier
-	 */
-	public JSONObject getRecipe(Long id) {
-		
-		try {
-			String apiUrl = builder.buildRecipeGetUrl(id);
-			return getJSONResponse(apiUrl);
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * Returns json object associated with the response from fatsecret api for given url
-	 *
-	 * @param apiUrl		the rest url which will be sent to fatsecret platform server
-	 * @return				json object containing search results for given url
-	 */
-	public JSONObject getJSONResponse(String apiUrl) {
-		
-		try {
-			URL url = new URL(apiUrl);
-			URLConnection api = url.openConnection();
-			String line;
-			StringBuilder builder = new StringBuilder();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(api.getInputStream()));
+  /**
+   * Returns the json object associated with the food id with nutritional information
+   *
+   * @param id                   the unique food identifier
+   * @param countryCode          country code representing the {@link com.fatsecret.platform.model.Country}
+   * @param languageCode         language code representing the {@link com.fatsecret.platform.model.Language}
+   * @param includeSubCategories flag to include sub categories in response
+   * @return food based on the identifier
+   */
+  public JSONObject getFood(Long id, String countryCode, String languageCode,
+      boolean includeSubCategories) {
+    String apiUrl = builder.buildFoodGetUrl(id, countryCode, languageCode, includeSubCategories);
+    return getJSONResponse(apiUrl);
+  }
 
-			while ((line = reader.readLine()) != null) builder.append(line);
+  /**
+   * Returns the json object associated with the recipes depending on the search query
+   *
+   * @param query      search terms for querying recipes
+   * @param pageNumber page Number to search the recipes
+   * @return recipes at a particular page number based on the query
+   */
+  public JSONObject searchRecipes(String query, int pageNumber) {
+    String apiUrl = builder.buildRecipesSearchUrl(query, pageNumber);
+    return getJSONResponse(apiUrl);
+  }
 
-			JSONObject json = new JSONObject(builder.toString());
+  /**
+   * Returns the json object associated with general information about the recipe item with detailed
+   * nutritional information for the standard serving
+   *
+   * @param id the unique recipe identifier
+   * @return recipe based on the identifier
+   */
+  public JSONObject getRecipe(Long id) {
+    String apiUrl = builder.buildRecipeGetUrl(id);
+    return getJSONResponse(apiUrl);
+  }
 
-			return json;
-		} catch(Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		return null;
-	}
+  /**
+   * Returns the json object associated with specific information about the sub categories of a food
+   * category.
+   *
+   * @param foodCategoryId the unique food category identifier
+   * @return sub categories for the food category
+   */
+  public JSONObject getFoodSubCategories(Long foodCategoryId) {
+    String apiUrl = builder.buildFoodSubCategoriesGetUrl(foodCategoryId);
+    return getJSONResponse(apiUrl);
+  }
+
+  /**
+   * Returns the json object associated with all the fatsecret food categories.
+   *
+   * @return all fatsecret food categories
+   */
+  public JSONObject getAllFoodCategories() {
+    String apiUrl = builder.buildFoodCategoriesGetUrl();
+    return getJSONResponse(apiUrl);
+  }
+
+  /**
+   * Returns json object associated with the response from fatsecret api for given url
+   *
+   * @param apiUrl the rest url which will be sent to fatsecret platform server
+   * @return json object containing search results for given url
+   */
+  public JSONObject getJSONResponse(String apiUrl) {
+
+    try {
+      URL url = new URL(apiUrl);
+      URLConnection api = url.openConnection();
+      String line;
+      StringBuilder builder = new StringBuilder();
+      BufferedReader reader = new BufferedReader(new InputStreamReader(api.getInputStream()));
+
+      while ((line = reader.readLine()) != null) {
+        builder.append(line);
+      }
+
+      return new JSONObject(builder.toString());
+    } catch (Exception e) {
+      System.out.println("Exception: " + e.getMessage());
+    }
+
+    return null;
+  }
 }

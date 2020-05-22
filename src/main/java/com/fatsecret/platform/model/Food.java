@@ -25,24 +25,35 @@ import java.util.List;
  */
 public class Food extends CompactFood {
 
-	/** A list of all servings for this food */
-	private List<Serving> servings;
-	
-	/**
-	 * Returns the list of all servings for this food
-	 * 
-	 * @return		the list of all servings for this food
-	 */
-	public List<Serving> getServings() {
-		return servings;
-	}
-	
-	/**
-	 * Sets the list of all servings for this food
-	 * 
-	 * @param		servings the list of all servings for this food
-	 */
-	public void setServings(List<Serving> servings) {
-		this.servings = servings;
-	}
+  /**
+   * A list of all servings for this food
+   */
+  private List<Serving> servings;
+  private List<FoodSubCategory> foodSubCategoryList;
+
+  /**
+   * Returns the list of all servings for this food
+   *
+   * @return the list of all servings for this food
+   */
+  public List<Serving> getServings() {
+    return servings;
+  }
+
+  /**
+   * Sets the list of all servings for this food
+   *
+   * @param servings the list of all servings for this food
+   */
+  public void setServings(List<Serving> servings) {
+    this.servings = servings;
+  }
+
+  public List<FoodSubCategory> getFoodSubCategoryList() {
+    return foodSubCategoryList;
+  }
+
+  public void setFoodSubCategoryList(List<FoodSubCategory> foodSubCategoryList) {
+    this.foodSubCategoryList = foodSubCategoryList;
+  }
 }
